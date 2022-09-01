@@ -21,7 +21,7 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
+     * @psalm-var iterable<array-key,TSource>
      * @var iterable
      */
     private $source;
@@ -33,7 +33,7 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
     private $selector;
 
     /**
-     * @psalm-param iterable<TSource> $source
+     * @psalm-param iterable<array-key,TSource> $source
      * @psalm-param callable(TSource,array-key):TResult $selector
      */
     public function __construct(iterable $source, callable $selector)

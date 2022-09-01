@@ -6,10 +6,9 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
-
 /**
  * @template TSource
- * @implements \IteratorAggregate<TSource[]>
+ * @implements \IteratorAggregate<array-key,TSource[]>
  * @implements EnumerableInterface<TSource[]>
  */
 class BufferIterator implements \IteratorAggregate, EnumerableInterface
@@ -20,7 +19,7 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
+     * @psalm-var iterable<array-key,TSource>
      * @var iterable
      */
     private $source;
@@ -36,7 +35,7 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
     private $skip;
 
     /**
-     * @psalm-param iterable<TSource> $source
+     * @psalm-param iterable<array-key,TSource> $source
      * @psalm-param int $count
      * @psalm-param int $skip
      */

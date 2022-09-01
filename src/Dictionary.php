@@ -61,7 +61,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return iterable<array{0:TKey,1:TValue}>
+     * @psalm-return iterable<array-key,array{0:TKey,1:TValue}>
      */
     public function getSource(): iterable
     {

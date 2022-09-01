@@ -20,7 +20,7 @@ final class Enumerable
 {
     /**
      * @template TSource extends object
-     * @psalm-param iterable<TSource> $source
+     * @psalm-param iterable<array-key,TSource> $source
      * @psalm-return EnumerableInterface<TSource>
      */
     public static function from(iterable $source): EnumerableInterface
@@ -30,7 +30,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param iterable<TSource> ...$sources
+     * @psalm-param iterable<array-key,TSource> ...$sources
      * @psalm-return EnumerableInterface<TSource>
      */
     public static function catch(iterable ...$sources): EnumerableInterface
@@ -40,7 +40,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param iterable<TSource> ...$sources
+     * @psalm-param iterable<array-key,TSource> ...$sources
      * @psalm-return EnumerableInterface<TSource>
      */
     public static function concat(iterable ...$sources): EnumerableInterface
@@ -50,7 +50,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param callable():(iterable<TSource>) $iterableFactory
+     * @psalm-param callable():(iterable<array-key,TSource>) $iterableFactory
      * @psalm-return EnumerableInterface<TSource>
      */
     public static function defer(callable $iterableFactory): EnumerableInterface
@@ -75,8 +75,8 @@ final class Enumerable
     /**
      * @template TResult
      * @psalm-param callable():bool $condition
-     * @psalm-param iterable<TResult> $thenSource
-     * @psalm-param iterable<TResult> $elseSource
+     * @psalm-param iterable<array-key,TResult> $thenSource
+     * @psalm-param iterable<array-key,TResult> $elseSource
      * @psalm-return EnumerableInterface<TResult>
      */
     public static function if(callable $condition, iterable $thenSource, iterable $elseSource): EnumerableInterface
@@ -86,7 +86,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param iterable<TSource> ...$sources
+     * @psalm-param iterable<array-key,TSource> ...$sources
      * @psalm-return EnumerableInterface<TSource>
      */
     public static function onErrorResumeNext(iterable ...$sources): EnumerableInterface
@@ -129,8 +129,8 @@ final class Enumerable
      * @template TFirst
      * @template TSecond
      * @template TResult
-     * @psalm-param iterable<TFirst> $first
-     * @psalm-param iterable<TSecond> $second
+     * @psalm-param iterable<array-key,TFirst> $first
+     * @psalm-param iterable<array-key,TSecond> $second
      * @psalm-param callable(TFirst,TSecond):TResult $resultSelector
      * @psalm-return EnumerableInterface<TResult>
      */

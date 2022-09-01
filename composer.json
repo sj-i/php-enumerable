@@ -13,7 +13,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",
-        "vimeo/psalm": "~3.10.0",
+        "vimeo/psalm": "~4.26.0",
         "friendsofphp/php-cs-fixer": "^2.16",
         "php-coveralls/php-coveralls": "^2.2"
     },
@@ -25,6 +25,12 @@
     "autoload-dev": {
         "psr-4": {
             "Emonkak\\Enumerable\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ocramius/package-versions": true,
+            "composer/package-versions-deprecated": true
         }
     }
 }

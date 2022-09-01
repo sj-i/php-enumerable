@@ -45,9 +45,13 @@ class EqualityComparer implements EqualityComparerInterface
             return false;
         }
         if ($firstType === 'array') {
+            assert(is_array($first));
+            assert(is_array($second));
             return $this->arrayEquals($first, $second);
         }
         if ($firstType === 'object') {
+            assert(is_object($first));
+            assert(is_object($second));
             if (get_class($first) !== get_class($second)) {
                 return false;
             }
@@ -58,11 +62,13 @@ class EqualityComparer implements EqualityComparerInterface
 
     private function arrayEquals(array $first, array $second): bool
     {
+        /** @psalm-suppress MixedAssignment */
         foreach ($first as $key => $value) {
             if (!isset($second[$key]) || !$this->equals($value, $second[$key])) {
                 return false;
             }
         }
+        /** @psalm-suppress MixedAssignment */
         foreach ($second as $key => $value) {
             if (!isset($first[$key]) || !$this->equals($value, $first[$key])) {
                 return false;

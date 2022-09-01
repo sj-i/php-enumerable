@@ -9,7 +9,7 @@ use Emonkak\Enumerable\Exception\NoSuchElementException;
 
 /**
  * @template TSource
- * @template-extends \Traversable<TSource>
+ * @template-extends \Traversable<array-key,TSource>
  */
 interface EnumerableInterface extends \Traversable
 {
@@ -382,7 +382,7 @@ interface EnumerableInterface extends \Traversable
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
      * @psalm-param ?callable(TSource):TElement $elementSelector
-     * @psalm-return array<array-key,TElement>
+     * @psalm-return ($elementSelector is null ? array<array-key,TSource> : array<array-key,TElement>)
      */
     public function toDictionary(callable $keySelector, ?callable $elementSelector = null): array;
 
@@ -390,7 +390,7 @@ interface EnumerableInterface extends \Traversable
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
      * @psalm-param ?callable(TSource):TElement $elementSelector
-     * @psalm-return array<array-key,TElement[]>
+     * @psalm-return ($elementSelector is null ? array<array-key,TSource[]> : array<array-key,TElement[]>)
      */
     public function toLookup(callable $keySelector, ?callable $elementSelector = null): array;
 

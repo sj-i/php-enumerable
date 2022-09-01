@@ -56,7 +56,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return iterable<T>
+     * @return iterable<array-key,T>
      */
     public function getSource(): iterable
     {

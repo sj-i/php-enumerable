@@ -17,13 +17,13 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<T>
+     * @psalm-var iterable<array-key,T>
      * @var iterable
      */
     private $source;
 
     /**
-     * @psalm-param iterable<T> $source
+     * @psalm-param iterable<array-key,T> $source
      */
     public function __construct(iterable $source)
     {
@@ -41,7 +41,7 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return iterable<T>
+     * @psalm-return iterable<array-key,T>
      */
     public function getSource(): iterable
     {

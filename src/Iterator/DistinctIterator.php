@@ -12,7 +12,7 @@ use Emonkak\Enumerable\Set;
 /**
  * @template TSource
  * @template TKey
- * @implements \IteratorAggregate<TSource>
+ * @implements \IteratorAggregate<array-key,TSource>
  * @implements EnumerableInterface<TSource>
  */
 class DistinctIterator implements \IteratorAggregate, EnumerableInterface
@@ -23,7 +23,7 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
+     * @psalm-var iterable<array-key,TSource>
      * @var iterable
      */
     private $source;
@@ -41,7 +41,7 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
     private $comparer;
 
     /**
-     * @psalm-param iterable<TSource> $source
+     * @psalm-param iterable<array-key,TSource> $source
      * @psalm-param callable(TSource):TKey $keySelector
      * @psalm-param EqualityComparerInterface<TKey> $comparer
      */

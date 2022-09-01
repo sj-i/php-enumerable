@@ -57,10 +57,10 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
         $this->descending = $descending;
         $this->parentComparer = $parentComparer ?:
             /**
-             * @psalm-param TElement $first
-             * @psalm-param TElement $second
+             * @psalm-param TElement $_first
+             * @psalm-param TElement $_second
              */
-            static function($first, $second): int {
+            static function($_first, $_second): int {
                 return 0;
             };
     }

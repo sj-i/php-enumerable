@@ -10,18 +10,18 @@ use Emonkak\Enumerable\EnumerableInterface;
 /**
  * @template TSource
  * @template TAccumulate
- * @implements \IteratorAggregate<TAccumulate[]>
- * @implements EnumerableInterface<TAccumulate[]>
+ * @implements \IteratorAggregate<array-key,TAccumulate>
+ * @implements EnumerableInterface<TAccumulate>
  */
 class ScanIterator implements \IteratorAggregate, EnumerableInterface
 {
     /**
-     * @use EnumerableExtensions<TAccumulate[]>
+     * @use EnumerableExtensions<TAccumulate>
      */
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
+     * @psalm-var iterable<array-key,TSource>
      * @var iterable
      */
     private $source;
@@ -39,7 +39,7 @@ class ScanIterator implements \IteratorAggregate, EnumerableInterface
     private $func;
 
     /**
-     * @psalm-param iterable<TSource> $source
+     * @psalm-param iterable<array-key,TSource> $source
      * @psalm-param TAccumulate $seed
      * @psalm-param callable(TAccumulate,TSource):TAccumulate $func
      */

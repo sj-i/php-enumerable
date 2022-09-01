@@ -199,21 +199,30 @@ trait EnumerableExtensions
      */
     public function distinct(?callable $keySelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var callable(TSource):TKey $keySelector */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
+        /** @psalm-var EqualityComparerInterface<TKey> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new DistinctIterator($this->getSource(), $keySelector, $comparer);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new DistinctIterator($source, $keySelector, $comparer);
     }
 
     /**
      * @template TKey
      * @psalm-param ?callable(TSource):TKey $keySelector
+     * @psalm-param ?EqualityComparerInterface<TKey> $comparer
      * @psalm-return EnumerableInterface<TSource>
      */
     public function distinctUntilChanged(?callable $keySelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var callable(TSource):TKey $keySelector */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
+        /** @psalm-var EqualityComparerInterface<TKey> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new DistinctUntilChangedIterator($this->getSource(), $keySelector, $comparer);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new DistinctUntilChangedIterator($source, $keySelector, $comparer);
     }
 
     /**
@@ -222,7 +231,9 @@ trait EnumerableExtensions
      */
     public function do(callable $action): EnumerableInterface
     {
-        return new DoIterator($this->getSource(), $action);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new DoIterator($source, $action);
     }
 
     /**
@@ -231,7 +242,9 @@ trait EnumerableExtensions
      */
     public function doWhile(callable $condition): EnumerableInterface
     {
-        return new DoWhileIterator($this->getSource(), $condition);
+        /** @var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new DoWhileIterator($source, $condition);
     }
 
     /**
@@ -240,11 +253,10 @@ trait EnumerableExtensions
      */
     public function elementAt(int $index)
     {
-        /** @psalm-var iterable<TSource> */
+        /** @psalm-var iterable<array-key,TSource> */
         $source = $this->getSource();
         if (is_array($source)) {
             if (isset($source[$index])) {
-                /** @psalm-var TSource */
                 $element = $source[$index];
                 return $element;
             }
@@ -272,11 +284,10 @@ trait EnumerableExtensions
      */
     public function elementAtOrDefault(int $index, $defaultValue = null)
     {
-        /** @psalm-var iterable<TSource> */
+        /** @psalm-var iterable<array-key,TSource> */
         $source = $this->getSource();
         if (is_array($source)) {
             if (isset($source[$index])) {
-                /** @psalm-var TSource */
                 $element = $source[$index];
                 return $element;
             }
@@ -304,8 +315,11 @@ trait EnumerableExtensions
      */
     public function except(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var EqualityComparerInterface<TSource> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new ExceptIterator($this->getSource(), $second, $comparer);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new ExceptIterator($source, $second, $comparer);
     }
 
     /**
@@ -388,7 +402,9 @@ trait EnumerableExtensions
      */
     public function groupBy(callable $keySelector, ?callable $elementSelector = null, ?callable $resultSelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var callable(TSource):TElement $elementSelector */
         $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
+        /** @psalm-var callable(TKey,TElement[]):TResult $resultSelector */
         $resultSelector = $resultSelector ?:
             /**
              * @psalm-param TKey $key
@@ -398,8 +414,11 @@ trait EnumerableExtensions
             static function($key, array $values): array {
                 return [$key, $values];
             };
+        /** @psalm-var EqualityComparerInterface<TKey> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new GroupByIterator($this->getSource(), $keySelector, $elementSelector, $resultSelector, $comparer);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new GroupByIterator($source, $keySelector, $elementSelector, $resultSelector, $comparer);
     }
 
     /**
@@ -415,8 +434,11 @@ trait EnumerableExtensions
      */
     public function groupJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var EqualityComparerInterface<TKey> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new GroupJoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new GroupJoinIterator($source, $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
     }
 
     /**
@@ -434,8 +456,11 @@ trait EnumerableExtensions
      */
     public function intersect(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var EqualityComparerInterface<TSource> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new IntersectIterator($this->getSource(), $second, $comparer);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new IntersectIterator($source, $second, $comparer);
     }
 
     public function isEmpty(): bool
@@ -459,8 +484,11 @@ trait EnumerableExtensions
      */
     public function join(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var EqualityComparerInterface<TKey> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new JoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new JoinIterator($source, $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
     }
 
     /**
@@ -676,8 +704,11 @@ trait EnumerableExtensions
      */
     public function outerJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var EqualityComparerInterface<TKey> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new OuterJoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new OuterJoinIterator($source, $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
     }
 
     /**
@@ -687,8 +718,11 @@ trait EnumerableExtensions
      */
     public function orderBy(?callable $keySelector = null): OrderedEnumerableInterface
     {
+        /** @psalm-var callable(TSource):TKey $keySelector */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
-        return new OrderByIterator($this->getSource(), $keySelector, false);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new OrderByIterator($source, $keySelector, false);
     }
 
     /**
@@ -698,8 +732,11 @@ trait EnumerableExtensions
      */
     public function orderByDescending(?callable $keySelector = null): OrderedEnumerableInterface
     {
+        /** @psalm-var callable(TSource):TKey $keySelector */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
-        return new OrderByIterator($this->getSource(), $keySelector, true);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new OrderByIterator($source, $keySelector, true);
     }
 
     /**
@@ -736,7 +773,9 @@ trait EnumerableExtensions
      */
     public function scan($seed, callable $func): EnumerableInterface
     {
-        return new ScanIterator($this->getSource(), $seed, $func);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new ScanIterator($source, $seed, $func);
     }
 
     /**
@@ -746,7 +785,9 @@ trait EnumerableExtensions
      */
     public function select(callable $selector): EnumerableInterface
     {
-        return new SelectIterator($this->getSource(), $selector);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new SelectIterator($source, $selector);
     }
 
     /**
@@ -756,7 +797,9 @@ trait EnumerableExtensions
      */
     public function selectMany(callable $collectionSelector): EnumerableInterface
     {
-        return new SelectManyIterator($this->getSource(), $collectionSelector);
+        /** @psalm-var iterable<array-key,TSource> $source */
+        $source = $this->getSource();
+        return new SelectManyIterator($source, $collectionSelector);
     }
 
     /**
@@ -767,7 +810,7 @@ trait EnumerableExtensions
      */
     public function single(?callable $predicate = null)
     {
-        /** @psalm-var iterable<TSource> */
+        /** @psalm-var iterable<array-key,TSource> $source */
         $source = $this->getSource();
         if ($predicate !== null) {
             $value = null;
@@ -826,7 +869,7 @@ trait EnumerableExtensions
      */
     public function singleOrDefault(?callable $predicate = null, $defaultValue = null)
     {
-        /** @psalm-var iterable<TSource> */
+        /** @psalm-var iterable<array-key,TSource> $source */
         $source = $this->getSource();
         if ($predicate !== null) {
             $value = null;
@@ -903,7 +946,9 @@ trait EnumerableExtensions
      */
     public function skipWhile(callable $predicate): EnumerableInterface
     {
-        return new SkipWhileIterator($this->getSource(), $predicate);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new SkipWhileIterator($source, $predicate);
     }
 
     /**
@@ -944,7 +989,9 @@ trait EnumerableExtensions
      */
     public function takeLast(int $count): EnumerableInterface
     {
-        return new TakeLastIterator($this->getSource(), $count);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new TakeLastIterator($source, $count);
     }
 
     /**
@@ -953,7 +1000,9 @@ trait EnumerableExtensions
      */
     public function takeWhile(callable $predicate): EnumerableInterface
     {
-        return new TakeWhileIterator($this->getSource(), $predicate);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new TakeWhileIterator($source, $predicate);
     }
 
     /**
@@ -967,25 +1016,33 @@ trait EnumerableExtensions
     /**
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
+     * @psalm-suppress ImplementedParamTypeMismatch
      * @psalm-param ?callable(TSource):TElement $elementSelector
-     * @psalm-return array<array-key,TElement>
+     * @psalm-return ($elementSelector is null ? array<array-key,TSource> : array<array-key,TElement>)
      */
     public function toDictionary(callable $keySelector, ?callable $elementSelector = null): array
     {
+        /** @psalm-var callable(TSource):TElement $elementSelector */
         $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
-        return Converters::toDictionary($this->getSource(), $keySelector, $elementSelector);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return Converters::toDictionary($source, $keySelector, $elementSelector);
     }
 
     /**
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
+     * @psalm-suppress ImplementedParamTypeMismatch
      * @psalm-param ?callable(TSource):TElement $elementSelector
-     * @psalm-return array<array-key,TElement[]>
+     * @psalm-return ($elementSelector is null ? array<array-key,TSource[]> : array<array-key,TElement[]>)
      */
     public function toLookup(callable $keySelector, ?callable $elementSelector = null): array
     {
+        /** @psalm-var callable(TSource):TElement $elementSelector */
         $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
-        return Converters::toLookup($this->getSource(), $keySelector, $elementSelector);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return Converters::toLookup($source, $keySelector, $elementSelector);
     }
 
     /**
@@ -1003,8 +1060,11 @@ trait EnumerableExtensions
      */
     public function union(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
+        /** @psalm-var EqualityComparerInterface<TSource> $comparer */
         $comparer = $comparer ?: EqualityComparer::getInstance();
-        return new UnionIterator($this->getSource(), $second, $comparer);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new UnionIterator($source, $second, $comparer);
     }
 
     /**
@@ -1013,7 +1073,9 @@ trait EnumerableExtensions
      */
     public function where(callable $predicate): EnumerableInterface
     {
-        return new WhereIterator($this->getSource(), $predicate);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new WhereIterator($source, $predicate);
     }
 
     /**
@@ -1034,11 +1096,13 @@ trait EnumerableExtensions
      */
     public function zip(iterable $second, callable $resultSelector): EnumerableInterface
     {
-        return new ZipIterator($this->getSource(), $second, $resultSelector);
+        /** @psalm-var iterable<array-key, TSource> $source */
+        $source = $this->getSource();
+        return new ZipIterator($source, $second, $resultSelector);
     }
 
     /**
-     * @psalm-return iterable<TSource>
+     * @psalm-return iterable<array-key,TSource>
      */
     public function getSource(): iterable
     {
